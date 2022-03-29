@@ -40,6 +40,47 @@ const todoRequired: RequiredByKeys<CasualTodo, 'title' | 'description'> = {
 
 /**
  *
+ * @description Readonly 对象类型 T 全部 keys 为仅可读的对象类型
+ *
+ */
+
+type ElonReadonly<T> = {
+  readonly [key in keyof T]: T[key];
+};
+
+// 官方示例  https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype
+interface CasualTodo {
+  title?: string;
+  description?: string;
+}
+
+const todoReadonly: ElonReadonly<CasualTodo> = {
+  title: 'abc',
+  description: 'abc',
+};
+
+//  todoReadonly.title = '123'; // error
+
+/**
+ *
+ * @author ElonWu
+ * @description Record 构建对象类型， key 是联合类型 T ， value 是类型 K
+ *
+ */
+type ElonRecord<T extends string | number | symbol, K> = {
+  [key in T]: K;
+};
+
+// 官方示例  https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys
+type RecPreview = ElonRecord<'title' | 'decription', string>;
+
+const recrod: RecPreview = {
+  title: 'abc',
+  decription: 'abc',
+};
+
+/**
+ *
  * @author ElonWu
  * @description Pick 从对象类型 T 中取 keys 的子集，构造出新的对象类型
  *
@@ -112,3 +153,17 @@ type ElonReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
 
 // 官方示例  https://www.typescriptlang.org/docs/handbook/utility-types.html#extracttype-union
 type returnType = ElonReturnType<() => number[]>;
+
+/**
+ *
+ * @author ElonWu
+ * @description Flatten 平铺， 两种实现
+ *
+ */
+// 条件类型 + 获取数组元素类型
+type Flatten<T> = T extends any[] ? T[number] : T;
+// 条件类型 + infer 元素类型
+type Flatten1<T> = T extends Array<infer U> ? U : T; // 类型数组的元素的类型，或当前类型
+
+type ElonNumber = Flatten<number[]>; // number 如果是任意类型的数组，则获取数据元素的类型
+type ElonString = Flatten1<string>; // string 否则获取本身的类型

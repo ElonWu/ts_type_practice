@@ -13,14 +13,6 @@ function split<T extends string>(str: T): ElonReturn<T> {
 }
 const res = split('a=b');
 
-// 条件类型 + 获取数组元素类型
-type Flatten<T> = T extends any[] ? T[number] : T;
-// 条件类型 + infer 元素类型
-type Flatten1<T> = T extends Array<infer U> ? U : T;
-
-type ElonNumber = Flatten<number[]>; // number 如果是任意类型的数组，则获取数据元素的类型
-type ElonString = Flatten1<string>; // string 否则获取本身的类型
-
 /**
  *  模板类型
  */
